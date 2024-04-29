@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <script src="js/jquery-2.1.3.min.js"></script>
+  <link rel="stylesheet" href="css/sample.css">
+  <title>お金持ちゲーム</title>
+</head>
+
+<body>
+
+  <header>
+  </header>
+
+  <main>
+
+<!-- 結果の並び順 -->
+    <div class="number">
+      <div id="pc_hands"></div>
+      <div id="pc_hands2"></div>
+      <div id="pc_hands3"></div>
+    </div>
+
+    <!-- totalコインの枚数 -->
+    <div class="coin_wrapping">
+      <img class="coin_gold" src="./img/coin_gold_02.png" alt="">
+      <span id="totalscore"></span>
+    </div>
+
+    <div class="coin">
+      <!-- コインの並び順 -->
+      <div class="coindisplay"><img src="./img/coin_gold_02.png" alt="" id="display1"></div>
+      <div class="coindisplay"></div>
+      <div class="coindisplay"><img src="./img/coin_gold_02.png" alt="" id="display2"></div>
+      <div class="coindisplay"></div>
+      <div class="coindisplay"><img src="./img/coin_gold_02.png" alt="" id="display3"></div>
+      <div class="coindisplay"></div>
+    </div>
+    <div class="coin">
+      <!-- ブロックの並び順 -->
+      <img class="blockimg" src="./img/block_renga_brown.png" alt="">
+      <img class="blockimg" src="./img/block_gold.png" alt="">
+      <img class="blockimg" src="./img/block_renga_brown_batu.png" alt="">
+      <img class="blockimg" src="./img/block_gold.png" alt="">
+      <img class="blockimg" src="./img/block_renga_brown_batu.png" alt="">
+      <img class="blockimg" src="./img/block_gold.png" alt="">
+      <img class="blockimg" src="./img/block_renga_brown.png" alt="">
+    </div>
+
+
+    <div>
+      <img id="mario" src="./img/mario.png" alt="">
+      <h2>コイン枚数 <span id="judgment"></span></h2>
+    </div>
+
+  </main>
+  <!-- スーファミ風コントローラー追加 -->
+  <div class="spf-wrapping">
+    <div class="spf-controller">
+      <div class="controller-left">
+        <div class="cross-layout">
+          <button class="position-top btn cross-key-btn"><span class="top-mark">▲</span></button>
+          <button class="position-left btn cross-key-btn"><span class="left-mark">▲</span></button>
+          <button class="position-center btn cross-key-btn"><span class="center-mark">●</span></button>
+          <button class="position-right btn cross-key-btn"><span class="right-mark">▲</span></button>
+          <button class="position-bottom btn cross-key-btn"><span class="bottom-mark">▲</span></button>
+        </div>
+      </div>
+      <div class="controller-center">
+        <span class="logo-msg">Controller</span>
+        <div class="selectstart-btn-set">
+          <button id="btnReset" class="btn selectstart-btn"></button><!-- 左のスラッシュ -->
+          <button class="btn selectstart-btn"></button><!-- 右のスラッシュ -->
+        </div>
+      </div>
+      <div class="controller-right">
+        <div class="abxy-btn-set">
+          <div class="cross-layout">
+            <button class="btn abxy-btn position-top btn-x">X</button>
+            <button class="btn abxy-btn position-left btn-y">Y</button>
+            <button id="btnResult" class="btn abxy-btn position-right btn-a">A</button>
+            <button class="btn abxy-btn position-bottom btn-b">B</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- スーファミ風コントローラー追加終了 -->
+
+  <footer>
+    <div>
+      <p>コントローラー　操作説明書</p>
+      <p>Aボタン　ジャンプ</p>
+      <p>Bボタン　ダッシュ</p>
+      <p>セレクトボタン（左側／）　ゲームリセット</p>
+      <P>ルール</P>
+      <p>・黄色のブロックから、コインはそれぞれ０か１か２が出ます。</p>
+      <P>・3つのブロックのコインの和が結果に出ます。</p>
+      <P>・3回連続結果が0だったら、ボーナスタイム突入！</p>
+      <P>・ボーナスタイムでは得点が２倍！</p>
+    </div>
+  </footer>
+
+  <script>
+    // コイン点滅のために追加
+    function blink(element, times, interval) {
+      if (times === 0) {
+        // 0回の場合、何もせず透明のまま
+        return;
+      }
+
+      let counter = 0;
+      let opacityLevel = 1; // 最初は表示
+      element.style.opacity = opacityLevel;
+
+      if (times === 1) {
+        // 1回の場合、0.5秒後に透明にする
+        setTimeout(() => {
+          element.style.opacity = 0;
+        }, 500);
+        return;
+      }
+
+      // 2回の場合、1回点滅後に透明にする
+      const timer = setInterval(() => {
+        opacityLevel = (opacityLevel === 0) ? 1 : 0;
+        element.style.opacity = opacityLevel;
+
+        counter++;
+        if (counter >= 2) { // 1回点滅 (表示→非表示→表示)
+          clearInterval(timer);
+          setTimeout(() => {
+            element.style.opacity = 0; // 0.5秒後に透明度を0に設定
+          }, 500);
+        }
+      }, interval);
+    }
+
+
+    let totalScore = 0;
+    let flag0 = 0; // 0の出た回数を数える
+    let bonusTime = 0;
+
+    $("#btnResult").on("click", function () {
+      let result1, result2, result3;
+      console.log(bonusTime);
+
+      // ボーナスタイム発動条件
+      if (flag0 == 3) {
+        bonusTime = 3; // ボーナスタイムを2回設定
+        // flag0 = 0; // フラグをリセット
+      }
+
+      if (bonusTime > 0) {
+        result1 = Math.floor(Math.random() * 2) + 1; // 1, 2
+        result2 = Math.floor(Math.random() * 2) + 1; // 1, 2
+        result3 = Math.floor(Math.random() * 2) + 1; // 1, 2
+        bonusTime--; // ボーナスタイムを減算
+      } else {
+        result1 = Math.floor(Math.random() * 3); // 0, 1, 2
+        result2 = Math.floor(Math.random() * 3); // 0, 1, 2
+        result3 = Math.floor(Math.random() * 3); // 0, 1, 2
+        stopStars();  // ボーナスタイムが終了したら星のエフェクトを停止
+      }
+
+      const display1 = document.getElementById('display1');
+      const display2 = document.getElementById('display2');
+      const display3 = document.getElementById('display3');
+
+      blink(display1, result1, 500); // display1をresult1回点滅させる
+      blink(display2, result2, 500); // display2をresult2回点滅させる
+      blink(display3, result3, 500); // display3をresult3回点滅させる
+
+      $("#pc_hands").html(result1);
+      $("#pc_hands2").html(result2);
+      $("#pc_hands3").html(result3);
+
+      // 結果の計算
+      let total = (result1) * (result2) * (result3);
+      if (bonusTime > 0) {
+        total *= 2; // ボーナスタイムで得点2倍
+        startStars();  // ボーナスタイム中に星のエフェクトを開始
+      }
+      $("#judgment").html(total);
+
+      // トータルスコアに加算
+      totalScore += total;
+      $("#totalscore").html(totalScore);
+
+      // 0の数をflagでカウント
+      if (total == 0) {
+        flag0++;
+      } else {
+        flag0 = 0; // 連続していなければリセット
+      }
+    });
+
+    // リセットボタンのクリックイベント
+    $("#btnReset").on("click", function () {
+      $("#pc_hands").html("");
+      $("#pc_hands2").html("");
+      $("#pc_hands3").html("");
+      $("#judgment").html("");
+      $("#totalscore").html("");
+      totalScore = 0;
+      flag0 = 0;
+      bonusTime = 0;
+    });
+
+
+    // マリオを動かす
+    const btnResult = document.getElementById('btnResult') // JUMPボタン
+    const mario = document.getElementById('mario')// マリオ画像
+
+    // スタートボタンをクリックしたら
+    btnResult.addEventListener('click', () => {
+      // 画像を左端から200px右に動かす
+      mario.animate(
+        // 途中の状態を表す配列
+        [
+          { transform: 'translateX(-200px)' }, // 開始時の状態（左端）
+          { transform: 'translateX(400px)' } // 終了時の状態（左端から200pxの位置）
+        ],
+        // タイミングに関する設定
+        {
+          fill: 'backwards', // 再生前後の状態（再生前、開始時の状態を適用）
+          duration: 2000, // 再生時間（2000ミリ秒）
+        },
+      );
+    });
+
+    // 星のエフェクト追加★★★
+
+    // 星のエフェクトを開始する関数
+    function startStars() {
+      starMaker(50);
+    }
+
+    // 星のエフェクトを停止する関数
+    function stopStars() {
+      $('.star').remove();
+    }
+
+    function starMaker(n) {
+      for (var i = 0; i < n; i++) {
+        var star = document.createElement("div");
+        star.className = "star";
+        star.textContent = "★";
+        star.style.left = Math.random() * 100 + '%'; // 画面の幅に対するパーセンテージで左位置をランダム設定
+        star.style.fontSize = (Math.random() * (30 - 10) + 10) + 'px'; // 10pxから30pxの間でサイズをランダムに設定
+        star.style.animationDuration = (Math.random() * (10 - 5) + 5) + 's'; // 5秒から10秒の間でアニメーションの持続時間をランダムに設定
+        document.body.appendChild(star);
+
+        // 星が画面下に到達した後の処理
+        star.addEventListener('animationend', function () {
+          this.remove(); // アニメーションが終了した星をDOMから削除
+        });
+      }
+    }
+
+    // ボーナスタイム中に星を生成する例
+    if (bonusTime > 1) {
+      starMaker(100); // 星を100個生成する
+    }
+
+
+    //星のセッティングをする関数。
+    function starSet(clone) {
+      var starClone = clone.cloneNode(true);
+      var starStyle = starClone.style;
+
+      //星の位置（left）、アニメーションの遅延時間（animation-delay）、サイズ（font-size）をランダムで指定
+      starStyle.left = 100 * Math.random() + "%";
+      starStyle.animationDelay = 8 * Math.random() + "s";
+      starStyle.fontSize = ~~(50 * Math.random() + 20) + "px";
+      document.body.appendChild(starClone);
+
+      //星一つのアニメーションが終わったら新しい星を生成
+      starClone.addEventListener("animationend", function () {
+        this.parentNode.removeChild(this);
+        var star = document.createElement("div");
+        star.className = "star";
+        star.textContent = "★";
+        starSet(star);
+      }, false)
+    }
+
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <script src="js/jquery-2.1.3.min.js"></script>
+  <link rel="stylesheet" href="css/sample.css">
+  <title>お金持ちゲーム</title>
+</head>
+
+<body>
+
+  <header>
+  </header>
+
+  <main>
+
+<!-- 結果の並び順 -->
+    <div class="number">
+      <div id="pc_hands"></div>
+      <div id="pc_hands2"></div>
+      <div id="pc_hands3"></div>
+    </div>
+
+    <!-- totalコインの枚数 -->
+    <div class="coin_wrapping">
+      <img class="coin_gold" src="./img/coin_gold_02.png" alt="">
+      <span id="totalscore"></span>
+    </div>
+
+    <div class="coin">
+      <!-- コインの並び順 -->
+      <div class="coindisplay"><img src="./img/coin_gold_02.png" alt="" id="display1"></div>
+      <div class="coindisplay"></div>
+      <div class="coindisplay"><img src="./img/coin_gold_02.png" alt="" id="display2"></div>
+      <div class="coindisplay"></div>
+      <div class="coindisplay"><img src="./img/coin_gold_02.png" alt="" id="display3"></div>
+      <div class="coindisplay"></div>
+    </div>
+    <div class="coin">
+      <!-- ブロックの並び順 -->
+      <img class="blockimg" src="./img/block_renga_brown.png" alt="">
+      <img class="blockimg" src="./img/block_gold.png" alt="">
+      <img class="blockimg" src="./img/block_renga_brown_batu.png" alt="">
+      <img class="blockimg" src="./img/block_gold.png" alt="">
+      <img class="blockimg" src="./img/block_renga_brown_batu.png" alt="">
+      <img class="blockimg" src="./img/block_gold.png" alt="">
+      <img class="blockimg" src="./img/block_renga_brown.png" alt="">
+    </div>
+
+
+    <div>
+      <img id="mario" src="./img/mario.png" alt="">
+      <h2>コイン枚数 <span id="judgment"></span></h2>
+    </div>
+
+  </main>
+  <!-- スーファミ風コントローラー追加 -->
+  <div class="spf-wrapping">
+    <div class="spf-controller">
+      <div class="controller-left">
+        <div class="cross-layout">
+          <button class="position-top btn cross-key-btn"><span class="top-mark">▲</span></button>
+          <button class="position-left btn cross-key-btn"><span class="left-mark">▲</span></button>
+          <button class="position-center btn cross-key-btn"><span class="center-mark">●</span></button>
+          <button class="position-right btn cross-key-btn"><span class="right-mark">▲</span></button>
+          <button class="position-bottom btn cross-key-btn"><span class="bottom-mark">▲</span></button>
+        </div>
+      </div>
+      <div class="controller-center">
+        <span class="logo-msg">Controller</span>
+        <div class="selectstart-btn-set">
+          <button id="btnReset" class="btn selectstart-btn"></button><!-- 左のスラッシュ -->
+          <button class="btn selectstart-btn"></button><!-- 右のスラッシュ -->
+        </div>
+      </div>
+      <div class="controller-right">
+        <div class="abxy-btn-set">
+          <div class="cross-layout">
+            <button class="btn abxy-btn position-top btn-x">X</button>
+            <button class="btn abxy-btn position-left btn-y">Y</button>
+            <button id="btnResult" class="btn abxy-btn position-right btn-a">A</button>
+            <button class="btn abxy-btn position-bottom btn-b">B</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- スーファミ風コントローラー追加終了 -->
+
+  <footer>
+    <div>
+      <p>コントローラー　操作説明書</p>
+      <p>Aボタン　ジャンプ</p>
+      <p>Bボタン　ダッシュ</p>
+      <p>セレクトボタン（左側／）　ゲームリセット</p>
+      <P>ルール</P>
+      <p>・黄色のブロックから、コインはそれぞれ０か１か２が出ます。</p>
+      <P>・3つのブロックのコインの和が結果に出ます。</p>
+      <P>・3回連続結果が0だったら、ボーナスタイム突入！</p>
+      <P>・ボーナスタイムでは得点が２倍！</p>
+    </div>
+  </footer>
+
+  <script>
+    $(document).ready(function() {
+        let totalScore = 0;
+        let clickCount = 50; // 初期クリック数を50に設定
+        let maxClicks = 50;  // 最大クリック数も50
+        let result1 = 0, result2 = 0, result3 = 0; // グローバルスコープで初期化
+    
+        $("#totalscore").html(totalScore);  // 初期スコアを表示
+        $("#clickCounter").html("" + clickCount);  // 初期クリック数を表示
+    
+        $("#btnResult").on("click", function () {
+            if (clickCount > 0) {
+                clickCount--;  // クリックカウントを1減らす
+                $("#clickCounter").html("" + clickCount);  // クリック数を更新
+                result1 = Math.floor(Math.random() * 3);  // 0, 1, 2 のランダムな数を生成
+                result2 = Math.floor(Math.random() * 3);  // 別のランダムな数を生成
+                result3 = Math.floor(Math.random() * 3);  // 更に別のランダムな数を生成
+                totalScore += result1 + result2 + result3;  // トータルスコアに加算
+                $("#totalscore").html(totalScore);  // スコアを更新
+    
+                // クリック数が0になった時、かつトータルスコアが100未満の場合、ゲームオーバー
+                if (totalScore < 100 && clickCount === 0) {
+                    alert("GAME OVER");
+                }
+            }
+        });
+    
+        $("#showBlock2").on("click", function() {
+            if (totalScore >= 5) {
+                $("#block2").css("display", "block");  // CSSスタイルで表示
+                totalScore -= 5;
+                console.log(result2);
+            }
+        });
+    });
+    </script>
+
+</body>
+
+</html>

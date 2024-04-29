@@ -1,0 +1,293 @@
+@font-face {
+    font-family: "PixelMplus12";
+    src: url("../PixelMplus-20130602/PixelMplus12-Regular.ttf") format("truetype");
+}
+
+body {
+    height: 100%;
+    background-color: rgba(0, 157, 255, 0.89);
+    line-height: 1.5;
+    /* 行間 */
+    text-align: center;
+    font-family: "PixelMplus12";
+    ;
+}
+
+/* 初期説明画面のスタイル */
+#introScreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+/* ゲーム本体とフッターの初期スタイル（非表示） */
+main,
+.footer {
+    display: none;
+}
+
+/* ゲームクリア画面のスタイル */
+#gameClearScreen {
+    opacity: 0;
+    /* 透明 0：透明、1：100％表示 */
+}
+
+#gameClearScreen img {
+    width: 200px;
+    height: auto;
+}
+
+header {
+    background-color: black;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    color: #FFF;
+}
+
+.btn_small,
+a.btn_small,
+button.btn_small {
+    font-size: 14px;
+    position: relative;
+    display: inline-block;
+    padding: 10px;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.3s;
+    text-align: center;
+    vertical-align: middle;
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    color: #212529;
+    border-radius: 5px;
+    border: solid rgba(255, 255, 255, 0.114) 5px
+}
+
+footer {
+    padding: 10px;
+    background-color: black;
+    text-align: left;
+}
+
+p {
+    text-align: center;
+    color: #FFF;
+}
+
+.first_ex {
+    text-align: left;
+}
+
+.counter_wrapping {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.total_coin,
+.click_Counter {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    font-size: 30px;
+}
+
+.coin_gold,
+.kibako,
+.jewelry {
+    width: 30px;
+    height: auto;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.key_gold {
+    width: 20px;
+    height: auto;
+    padding: 20px;
+    opacity: 0;
+    /* 透明 0：透明、1：100％表示 */
+}
+
+.coin_event_wrapping {
+    display: flex;
+}
+
+.coin_area {
+    padding: 10px;
+    width: 70%;
+}
+
+.coin {
+    display: flex;
+    /* コンテンツ横並び */
+    justify-content: center;
+}
+
+.coindisplay {
+    width: 100px;
+    height: 100px;
+}
+
+.coindisplay img {
+    opacity: 0;
+    /* 透明 0：透明、1：100％表示 */
+    width: 30px;
+    height: auto;
+}
+
+.block1,
+.block2,
+.block3 {
+    display: flex;
+}
+
+.blockimg {
+    width: 100px;
+    height: auto;
+    padding: 1px;
+}
+
+.mario {
+    display: flex;
+    justify-content: start;
+}
+
+.results {
+    display: flex;
+    justify-content: center;
+}
+
+.btn_wrapping{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+    height: 300px;
+}
+
+.btn,
+a.btn,
+button.btn {
+    font-size: 1.6rem;
+    font-weight: 700;
+    position: relative;
+    display: inline-block;
+    padding: 1rem 4rem;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.3s;
+    text-align: center;
+    vertical-align: middle;
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    color: #212529;
+    border-radius: 5px;
+    border: solid black 5px
+}
+
+.event_area_wrapping {
+    padding: 10px;
+    width: 30%;
+    background-color: black;
+}
+
+.event_area {
+    padding: 10px;
+    background-color: black;
+    border: solid white 5px
+}
+
+.key_text {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+
+.usagi_child {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+}
+
+.usagi_child img {
+    width: 40px;
+    height: auto;
+    padding: 10px;
+}
+
+.hammer {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+}
+
+.hammer img {
+    width: 40px;
+    height: auto;
+    padding: 10px;
+}
+
+.buyer {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+}
+
+.buyer img {
+    width: 40px;
+    height: auto;
+    padding: 10px;
+}
+
+.footer {
+    display: flex;
+    justify-content: center;
+}
+
+.setumei_wrapping{
+    width: 50%;
+    height: auto;
+    padding: 10px;
+}
+
+.setumei {
+    border: solid white 5px;
+    text-align: left;
+}
+
+
+/* ここからjsのコード */
+.star {
+    position: fixed;
+    color: gold;
+    animation-name: fall;
+    animation-timing-function: linear;
+    animation-iteration-count: 1;
+    top: -50px;
+    /* 初期位置を画面外に設定 */
+}
+
+@keyframes fall {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        top: 110vh;
+        opacity: 0;
+    }
+
+    /* 画面の縦の高さを超える位置まで移動 */
+}
+
+

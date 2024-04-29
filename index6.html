@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <script src="js/jquery-2.1.3.min.js"></script>
+  <link rel="stylesheet" href="css/sample.css">
+  <title>姫を救出せよ！</title>
+</head>
+
+
+<body>
+
+  <!-- 初期説明画面を追加 -->
+  <div id="introScreen">
+    <div>
+      <p class="first_ex">ククッパ「ピピ姫は　俺が　迎え入れる。</p>
+      <p class="first_ex">　　　　　５０日以内に　１００枚の　コインを集めろ。</p>
+      <p class="first_ex">　　　　　そうすれば　ピピ姫を　返してやる」</p>
+      <p class="first_ex">ピピ姫　「たすけて！　マオリ！」</p>
+      <p>　</p>
+      <img src="./img/kuppa1.png" alt="">
+      <p>クリックしてスタート</p>
+    </div>
+  </div>
+
+  <header>
+  </header>
+
+  <main>
+    <!-- totalコインの枚数 -->
+    <div class="counter_wrapping">
+      <div class="total_coin">
+        <img class="coin_gold" src="./img/coin_gold_02.png" alt="">
+        <span id="totalscore">0</span>
+        <img class="kibako" src="./img/kibako_01_brown.png" alt="">
+        <span id="material">0</span>
+        <img class="jewelry" src="./img/jewelry_square_red.png" alt="">
+        <span id="jewelry">0</span>
+        <img class="key_gold" src="./img/key_gold.png" alt="">
+      </div>
+
+
+      <div>
+        <button id="showBlock2">ノーマルブロックを5コインで購入</button>
+        <button id="showBlock3">リスクブロックを10コインで購入</button>
+        <button id="buyKeyButton" style="margin-top: 20px;">家の鍵を5コインで購入</button>
+      </div>
+
+      <div class="click_Counter">
+        <h5>残り</h5>
+        <div id="clickCounter">50</div>
+        <h5>日</h5>
+      </div>
+    </div>
+
+
+    <div class="coin_event_wrapping">
+      <!-- コインエリア -->
+      <div class="coin_area">
+        <div class="coin">
+          <!-- 隠しコインの並び順 -->
+          <div class="block1">
+            <div class="coindisplay"></div>
+            <div class="coindisplay"><img src="./img/coin_gold_02.png" alt="" id="display1"></div>
+          </div>
+          <div class="block2">
+            <div class="coindisplay"></div>
+            <div class="coindisplay"><img src="./img/coin_gold_02.png" alt="" id="display2"></div>
+          </div>
+          <div class="block3">
+            <div class="coindisplay"></div>
+            <div class="coindisplay"><img src="./img/coin_gold_02.png" alt="" id="display3"></div>
+            <div class="coindisplay"></div>
+          </div>
+        </div>
+        <div class="coin">
+          <!-- ブロックの並び順 -->
+          <div class="block1" id="block1">
+            <img class="blockimg" src="./img/block_renga_brown.png" alt="">
+            <img class="blockimg" src="./img/block_gold.png" alt="">
+          </div>
+          <div class="block2" id="block2">
+            <img class="blockimg" src="./img/block_renga_brown.png" alt="">
+            <img class="blockimg" src="./img/block_gold.png" alt="">
+          </div>
+          <div class="block3" id="block3">
+            <img class="blockimg" src="./img/block_renga_brown.png" alt="">
+            <img class="blockimg" src="./img/block_ishi.png" alt="">
+            <img class="blockimg" src="./img/block_renga_brown.png" alt="">
+          </div>
+        </div>
+
+
+
+        <style>
+          #block2,
+          #block3 {
+            display: none;
+          }
+        </style>
+
+        <div>
+          <img id="mario" src="./img/mariorun.png" alt="">
+          <!-- コイン確認用 -->
+          <div class="results">
+            <h2>block 1: <span id="result1Display">0</span>　</h2>
+            <h2>block 2: <span id="result2Display">0</span>　</h2>
+            <h2>block 3: <span id="result3Display">0</span>　</h2>
+          </div>
+        </div>
+
+  <!-- スーファミ風コントローラー追加 -->
+  <div class="spf-wrapping">
+    <div class="spf-controller">
+      <div class="controller-left">
+        <div class="cross-layout">
+          <button class="position-top btn cross-key-btn"><span class="top-mark">▲</span></button>
+          <button class="position-left btn cross-key-btn"><span class="left-mark">▲</span></button>
+          <button class="position-center btn cross-key-btn"><span class="center-mark">●</span></button>
+          <button class="position-right btn cross-key-btn"><span class="right-mark">▲</span></button>
+          <button class="position-bottom btn cross-key-btn"><span class="bottom-mark">▲</span></button>
+        </div>
+      </div>
+      <div class="controller-center">
+        <span class="logo-msg">Controller</span>
+        <div class="selectstart-btn-set">
+          <button id="btnReset" class="btn selectstart-btn"></button><!-- 左のスラッシュ -->
+          <button class="btn selectstart-btn"></button><!-- 右のスラッシュ -->
+        </div>
+      </div>
+      <div class="controller-right">
+        <div class="abxy-btn-set">
+          <div class="cross-layout">
+            <button class="btn abxy-btn position-top btn-x">X</button>
+            <button class="btn abxy-btn position-left btn-y">Y</button>
+            <button id="btnResult" class="btn abxy-btn position-right btn-a">A</button>
+            <button id="dash" class="btn abxy-btn position-bottom btn-b">B</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- スーファミ風コントローラー追加終了 -->
+
+
+      </div>
+
+      <!-- イベントエリア -->
+      <div class="event_area">
+
+        <!-- テキスト表示 -->
+        <div class="key_text">
+          <div id="keyStatus" style="color: green; display: none;">鍵が購入されました。泥棒の侵入を防いでいます！</div>
+        </div>
+        <div id="triplePointNotice" style="color: red; display: none;">スターが出ました!</div>
+        <div id="thiefNotice" style="color: red; display: none;">泥棒がコイン20枚を盗んでいきました！</div>
+        <!-- 素材購入 -->
+        <div class="usagi_child">
+          <img src="./img/character_jujin_usagi_child_man_white.png" alt="">
+          <p>少　年：　<span id="usagi_child">ぼくが　ひろった　きれいな石を　かわない？</span></p>
+        </div>
+        <input type="number" id="buyCount" value="1" min="1" max="5">
+        <button id="buyMaterialButton">買う</button>
+        <!-- 加工 -->
+        <div class="hammer">
+          <img src="./img/hammer.png" alt="">
+          <p>いくつ加工しよう？<span id="hammer"></span></p>
+        </div>
+        <input type="number" id="hammerCount" value="1" min="1" max="5">
+        <button id="jewelryButton">加工</button>
+        <!-- 火星人 -->
+        <div class="buyer">
+          <img src="./img/kaseijin_purple.png" alt="">
+          <p>火星人：　<span id="buyer">宝石ヲ　言イ値デ　買ッテヤル</span></p>
+        </div>
+        <input type="number" id="kaseijin_Count" value="1" min="1" max="5">
+        <button id="sellJewelryButton">売る</button>
+        <!-- シスター -->
+        <div class="buyer">
+          <img src="./img/character_sister_black.png" alt="">
+          <p>シスター：　<span id="buyer2">あなたの　罪を　ききましょう</span></p>
+        </div>
+        <input type="number" id="sister_Count" value="1" min="1" max="1">
+        <button id="sellJewelryButton2">売る</button>
+        <!-- 騎士 -->
+        <div class="buyer">
+          <img src="./img/character_heishi_armor_01_red.png" alt="">
+          <p>騎　士：　<span id="buyer3">国の秩序を　あらすのは　誰だ！</span></p>
+        </div>
+        <input type="number" id="kisi_Count" value="1" min="1" max="10">
+        <button id="sellJewelryButton3">売る</button>
+
+        <!-- ゲームクリアのとき表示 -->
+        <div id="gameClearScreen">
+          <p>ククッパ「約束通り　ピピ姫を返す」</p>
+          <p>ピピ姫　「あなたとの　生活も　悪くなかったわ」</p>
+          <img src="./img/kuppa2.png" alt="">
+        </div>
+      </div>
+
+      <!-- イベントエリア終了 -->
+    </div>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="setumei">
+      <p>コントローラー　操作説明書</p>
+      <p>Aボタン　ジャンプ</p>
+      <p>Bボタン　ダッシュ</p>
+      <p>Yボタン　宝石を売却</p>
+      <p>セレクトボタン（左側／）　ゲームリセット</p>
+    </div>
+    <div class="setumei">
+      <P>ルール</P>
+      <p>50日以内に　100枚コインをためて　姫を救出しよう！</p>
+      <p>・ノーマルブロック（黄色）は　０か１か２が出ます。</p>
+      <p>・リスクブロック（灰色）は　３か４か５の高得点！</p>
+      <p>ただし　-５も出るので要注意。</p>
+      <P>・3つのブロックの　コインの和が　コインマークに　出ます。</p>
+      <P>・スターがでたら　得点１０倍！</p>
+      <P>・泥棒に　コインを盗まれることも　あるかも？！</p>
+      <p>・鍵を購入すると　泥棒の侵入を防げます。</p>
+      <P>・素材を購入して　宝石に加工しよう！</p>
+      <p>・素材購入と加工は　１個５コイン消費します。</p>
+    </div>
+  </footer>
+
+  <script>
+    $(document).ready(function () {
+      // イントロスクリーンをクリックしたらゲームを表示
+      $("#introScreen").click(function () {
+        $(this).fadeOut();
+        $("main, footer").fadeIn();
+
+        // block3のボタンを押したとき、
+        $("#showBlock3").click(function () {
+          if (totalScore >= 10) {
+            $("#block3").css("display", "block");  // CSSスタイルで表示
+            totalScore -= 10;
+            result3 = getRandomResultForBlock3(); // 特殊なランダム値
+            updateScoresAndResults();
+          }
+          function updateScoresAndResults() {
+            $("#totalscore").text(totalScore);  // 更新したスコアを表示
+          }
+          function getRandomResultForBlock3() {
+            const results = [-3, -2, -1, 5, 6, 7, 8, 9, 10];
+            return results[Math.floor(Math.random() * results.length)];
+          }
+          // bottun3コイン点滅のために追加
+          function blink(element, times, interval) {
+            if (times === 0) {
+              // 0回の場合、何もせず透明のまま
+              return;
+            }
+
+            let counter = 0;
+            let opacityLevel = 1; // 最初は表示
+            element.style.opacity = opacityLevel;
+
+            if (times === 1) {
+              // 1回の場合、0.5秒後に透明にする
+              setTimeout(() => {
+                element.style.opacity = 0;
+              }, 500);
+              return;
+            }
+
+            // 2回の場合、1回点滅後に透明にする
+            const timer = setInterval(() => {
+              opacityLevel = (opacityLevel === 0) ? 1 : 0;
+              element.style.opacity = opacityLevel;
+
+              counter++;
+              if (counter >= 2) { // 1回点滅 (表示→非表示→表示)
+                clearInterval(timer);
+                setTimeout(() => {
+                  element.style.opacity = 0; // 0.5秒後に透明度を0に設定
+                }, 500);
+              }
+            }, interval);
+          }
+          // コイン点滅のJS終了
+        });
+
+        // block2のボタンを押したとき、
+        $("#showBlock2").click(function () {
+          if (totalScore >= 5) {
+            $("#block2").css("display", "block");  // CSSスタイルで表示
+            totalScore -= 5;
+            result2 = Math.floor(Math.random() * 3); // 0, 1, 2のランダムな値
+            updateScoresAndResults();
+          }
+          function updateScoresAndResults() {
+            $("#totalscore").text(totalScore);  // 更新したスコアを表示
+          }
+          // bottun2コイン点滅のために追加
+          function blink(element, times, interval) {
+            if (times === 0) {
+              // 0回の場合、何もせず透明のまま
+              return;
+            }
+
+            let counter = 0;
+            let opacityLevel = 1; // 最初は表示
+            element.style.opacity = opacityLevel;
+
+            if (times === 1) {
+              // 1回の場合、0.5秒後に透明にする
+              setTimeout(() => {
+                element.style.opacity = 0;
+              }, 500);
+              return;
+            }
+
+            // 2回の場合、1回点滅後に透明にする
+            const timer = setInterval(() => {
+              opacityLevel = (opacityLevel === 0) ? 1 : 0;
+              element.style.opacity = opacityLevel;
+
+              counter++;
+              if (counter >= 2) { // 1回点滅 (表示→非表示→表示)
+                clearInterval(timer);
+                setTimeout(() => {
+                  element.style.opacity = 0; // 0.5秒後に透明度を0に設定
+                }, 500);
+              }
+            }, interval);
+          }
+          // コイン点滅のJS終了
+        });
+      });
+
+      // bottun1コイン点滅のために追加
+      function blink(element, times, interval) {
+        if (times === 0) {
+          // 0回の場合、何もせず透明のまま
+          return;
+        }
+
+        let counter = 0;
+        let opacityLevel = 1; // 最初は表示
+        element.style.opacity = opacityLevel;
+
+        if (times === 1) {
+          // 1回の場合、0.5秒後に透明にする
+          setTimeout(() => {
+            element.style.opacity = 0;
+          }, 500);
+          return;
+        }
+
+        // 2回の場合、1回点滅後に透明にする
+        const timer = setInterval(() => {
+          opacityLevel = (opacityLevel === 0) ? 1 : 0;
+          element.style.opacity = opacityLevel;
+
+          counter++;
+          if (counter >= 2) { // 1回点滅 (表示→非表示→表示)
+            clearInterval(timer);
+            setTimeout(() => {
+              element.style.opacity = 0; // 0.5秒後に透明度を0に設定
+            }, 500);
+          }
+        }, interval);
+      }
+      // コイン点滅のJS終了
+
+      let totalScore = 0;
+      let flag0 = 0; // 0の出た回数を数える
+      let bonusTime = 0;
+      let clickCount = 50; // クリックカウントを50から開始
+      let hasKey = false; // 鍵が購入されているかどうかのフラグ
+      let materialCount = 0; // 素材の数を保持する変数
+      let jewelryCount = 0; // 宝石の数を保持する変数
+
+
+      // 鍵購入ボタンのクリックイベント
+      $("#buyKeyButton").on("click", function () {
+        if (totalScore >= 5 && !hasKey) { // コインが10枚以上あり、まだ鍵を持っていない場合
+          totalScore -= 5; // コインを10枚減らす
+          $("#totalscore").html(totalScore); // スコア更新
+          hasKey = true; // 鍵を持っている状態にする
+          $("#keyStatus").show(); // 鍵購入のステータスを表示
+          $(".key_gold").css("opacity", 1); // 鍵の画像を表示
+          $(this).prop('disabled', true).text('鍵は既に購入されています'); // ボタンを無効化しテキストを更新
+        } else if (hasKey) {
+          alert("鍵はすでに購入されています！");
+        } else {
+          alert("コインが足りません！");
+        }
+      });
+
+      // クリックイベントの処理で泥棒イベントをチェック
+      $("#btnResult").on("click", function () {
+        if (clickCount <= 0) {
+          return; // クリック数が0以下になったら処理を実行しない
+        }
+        clickCount--; // クリック数を減らす
+        $("#clickCounter").html("" + clickCount); // クリックカウンターを更新
+
+        let result1 = Math.floor(Math.random() * 3); // 0, 1, 2 のランダム値
+        $("#result1Display").html(result1); // 結果1を表示
+
+        let result2 = 0;
+        let result3 = 0;
+
+        if ($("#block2").css("display") !== "none") {
+          result2 = Math.floor(Math.random() * 3); // block2が表示されている場合
+          $("#result2Display").html(result2); // 結果2を表示
+        } else {
+          $("#result2Display").html(result2); // 結果2が0の場合も表示を更新
+        }
+
+        if ($("#block3").css("display") !== "none") {
+          const results = [-5, 3, 4, 5];
+          result3 = results[Math.floor(Math.random() * results.length)]; // block3が表示されている場合
+          $("#result3Display").html(result3); // 結果3を表示
+        } else {
+          $("#result3Display").html(result3); // 結果3が0の場合も表示を更新
+        }
+
+        // 50分の1の確率で得点が10倍になる
+        let isTriplePoint = (Math.floor(Math.random() * 50) === 0); // 0~49の整数で0が出れば真
+        let isThief = (Math.floor(Math.random() * 50) === 0); // 50分の1の確率で20点減
+
+        let total = result1 + result2 + result3;
+        if (isTriplePoint) {
+          total *= 10; // 得点10倍
+          $("#triplePointNotice").show().fadeOut(4000); // 通知を表示し、4秒後にフェードアウト
+          startStars(); // 星を降らせる
+          setTimeout(stopStars, 5000); // 5秒後に星を消す
+          console.log("Triple Points Activated!"); // コンソールにトリプルポイントが発動したことを表示
+        }
+        totalScore += total;
+        $("#totalscore").html(totalScore);
+
+        if (isThief && !hasKey) { // 泥棒イベントが発生し、鍵がない場合
+          totalScore -= 20; // 20点減
+          $("#totalscore").html(totalScore); // スコア更新
+          $("#thiefNotice").show().fadeOut(4000); // 泥棒の通知を表示し、4秒後にフェードアウト
+        } else if (isThief && hasKey) {
+          $("#thiefNotice").html("鍵のおかげで泥棒が防がれました！").show().fadeOut(4000); // 鍵が効果を発揮したことを通知
+        }
+
+        if (totalScore < 100 && clickCount === 0) {
+          alert("GAMEOVER");
+        }
+        if (totalScore > 100 && clickCount > 0) {
+          $("#gameClearScreen").css("opacity", 1); // ゲームクリア画面を表示
+        }
+      });
+
+      // コメントの配列
+      const comments = [
+        "これで　にんじんを　かってくる！",
+        "おじさん　ありがとう！",
+        "もっと　たくさん　かってほしいな！",
+        "石って　こんなに売れるんだ・・・。あ　なんでもない",
+        "その石　どうするの？",
+        "ぼくのいもうと　びょうきなんです・・・",
+        "きれいなおひめさまが　いなくなった　らしいよ",
+      ];
+
+      // 素材購入イベント
+      document.getElementById('buyMaterialButton').addEventListener('click', function () {
+        const buyCount = parseInt(document.getElementById('buyCount').value, 10); // 購入個数を取得
+        const cost = 5 * buyCount; // 必要コイン数を計算
+        if (totalScore >= cost) { // コインが必要量以上あるか
+          totalScore -= cost; // コインを減らす
+          clickCount -= 1; // クリック数を1減らす
+          materialCount += buyCount; // 素材カウントを増やす
+
+          $("#totalscore").text(totalScore); // スコア表示を更新
+          $("#clickCounter").text(clickCount); // クリックカウンターを更新
+          $("#material").text(materialCount); // 素材カウントを更新
+          // ランダムなコメントを表示
+          const randomComment = comments[Math.floor(Math.random() * comments.length)];
+          $("#usagi_child").html(randomComment); // コメントを更新
+
+          if (totalScore < 100 && clickCount === 0) {
+            alert("GAMEOVER");
+          }
+          if (totalScore > 100 && clickCount > 0) {
+            $("#gameClearScreen").css("opacity", 1); // ゲームクリア画面を表示
+          }
+        } else {
+          alert('コインが不足しています。');
+        }
+      });
+
+      // 素材加工イベント
+      document.getElementById('jewelryButton').addEventListener('click', function () {
+        const material_kakou_count = parseInt(document.getElementById('hammerCount').value, 10); // 加工個数を取得
+        const kakoucost = 5 * material_kakou_count; // 必要コイン数を計算
+        if (totalScore >= kakoucost && materialCount >= material_kakou_count) { // コインと素材が必要量以上あるか
+          totalScore -= kakoucost; // コインを減らす
+          clickCount -= 1; // クリック数を1減らす
+          materialCount -= material_kakou_count; // 素材を減らす
+          jewelryCount += material_kakou_count; // 宝石を増やす
+        } else {
+          alert('コインまたは素材が不足しています。'); // 足りない場合のアラート
+        }
+
+        // UI更新は条件に関わらず実施
+        $("#totalscore").text(totalScore); // スコア表示を更新
+        $("#clickCounter").text(clickCount); // クリックカウンターを更新
+        $("#material").text(materialCount); // 素材カウントを更新
+        $("#jewelry").text(jewelryCount); // 宝石カウントを更新
+
+        if (totalScore < 100 && clickCount === 0) {
+          alert("GAMEOVER");
+        }
+        if (totalScore > 100 && clickCount > 0) {
+          $("#gameClearScreen").css("opacity", 1); // ゲームクリア画面を表示
+        }
+      });
+
+      // 火星人に売る場合
+      document.getElementById('sellJewelryButton').addEventListener('click', function () {
+        const sellCount = parseInt(document.getElementById('kaseijin_Count').value, 10); // 売る個数を取得
+        if (jewelryCount >= sellCount && sellCount > 0 && clickCount > 0) { // 宝石が売る個数以上あり、クリックカウントが0より大きい場合
+          const prices = [5, 10, 20]; // 可能な売却金額
+          const sellPrice = prices[Math.floor(Math.random() * prices.length)]; // 売却金額をランダムに選択
+          const totalSellPrice = sellPrice * sellCount; // 売却総額を計算
+
+          totalScore += totalSellPrice; // 選ばれた売却金額を加算
+          clickCount -= 1; // クリック数を1減らす
+          jewelryCount -= sellCount; // 宝石の数を減らす
+
+          $("#totalscore").text(totalScore); // スコア表示を更新
+          $("#clickCounter").text(clickCount); // クリックカウンターを更新
+          $("#jewelry").text(jewelryCount); // 宝石の数を更新
+          $("#buyer").html("１個" + sellPrice + "デ　買ッテヤル　合計" + totalSellPrice + "ダ"); // 売却成功の通知
+        } else if (jewelryCount < sellCount || sellCount <= 0) {
+          $("#buyer").html("宝石　モッテコイ"); // 宝石不足の警告
+        }
+        if (totalScore < 100 && clickCount === 0) {
+          alert("GAMEOVER");
+        }
+        if (totalScore > 100 && clickCount > 0) {
+          $("#gameClearScreen").css("opacity", 1); // ゲームクリア画面を表示
+        }
+      });
+
+      // シスターに売る場合
+      document.getElementById('sellJewelryButton2').addEventListener('click', function () {
+        const sellCount = parseInt(document.getElementById('sister_Count').value, 10); // 売る個数を取得
+        if (jewelryCount >= sellCount && sellCount > 0 && clickCount > 0) { // 宝石が売る個数以上あり、クリックカウントが0より大きい場合
+          const prices = [0, 50]; // 可能な売却金額
+          const sellPrice = prices[Math.floor(Math.random() * prices.length)]; // 売却金額をランダムに選択
+          const totalSellPrice = sellPrice * sellCount; // 売却総額を計算
+
+          totalScore += totalSellPrice; // 選ばれた売却金額を加算
+          clickCount -= 1; // クリック数を1減らす
+          jewelryCount -= sellCount; // 宝石の数を減らす
+
+          $("#totalscore").text(totalScore); // スコア表示を更新
+          $("#clickCounter").text(clickCount); // クリックカウンターを更新
+          $("#jewelry").text(jewelryCount); // 宝石の数を更新
+          $("#buyer2").html(sellPrice + "で買いましょう"); // 売却成功の通知
+        } else if (jewelryCount < sellCount || sellCount <= 0) {
+          $("#buyer2").html("私は　いつでも　ここに　います"); // 宝石不足の警告
+        }
+        if (totalScore < 100 && clickCount === 0) {
+          alert("GAMEOVER");
+        }
+        if (totalScore > 100 && clickCount > 0) {
+          $("#gameClearScreen").css("opacity", 1); // ゲームクリア画面を表示
+        }
+      });
+
+      // 騎士に売る場合
+      document.getElementById('sellJewelryButton3').addEventListener('click', function () {
+        const sellCount = parseInt(document.getElementById('kisi_Count').value, 10); // 売る個数を取得
+        if (jewelryCount >= sellCount && sellCount > 0 && clickCount > 0) { // 宝石が売る個数以上あり、クリックカウントが0より大きい場合
+          const prices = [1, 2, 3, 4, 5]; // 可能な売却金額
+          const sellPrice = prices[Math.floor(Math.random() * prices.length)]; // 売却金額をランダムに選択
+          const totalSellPrice = sellPrice * sellCount; // 売却総額を計算
+
+          totalScore += totalSellPrice; // 選ばれた売却金額を加算
+          clickCount -= 1; // クリック数を1減らす
+          jewelryCount -= sellCount; // 宝石の数を減らす
+
+          $("#totalscore").text(totalScore); // スコア表示を更新
+          $("#clickCounter").text(clickCount); // クリックカウンターを更新
+          $("#jewelry").text(jewelryCount); // 宝石の数を更新
+          $("#buyer3").html(sellPrice + "で　買おうじゃないか　合計" + totalSellPrice + "だな"); // 売却成功の通知
+        } else if (jewelryCount < sellCount || sellCount <= 0) {
+          $("#buyer3").html("見逃してやる！"); // 宝石不足の警告
+        }
+        if (totalScore < 100 && clickCount === 0) {
+          alert("GAMEOVER");
+        }
+        if (totalScore > 100 && clickCount > 0) {
+          $("#gameClearScreen").css("opacity", 1); // ゲームクリア画面を表示
+        }
+      });
+
+      // リセットボタンのクリックイベント
+      $("#btnReset").on("click", function () {
+        $("#judgment").html("");
+        $("#totalscore").html("");
+        totalScore = 0;
+        flag0 = 0;
+        bonusTime = 0;
+        clickCount = 50; // クリックカウントもリセット
+        hasKey = false; // 鍵の購入フラグ
+        materialCount = 0; // 素材の数
+        jewelryCount = 0; // 宝石の数
+        $("#clickCounter").html("" + clickCount); // クリックカウンターをリセット
+      });
+
+
+      // マリオを動かす
+      const btnResult = document.getElementById('btnResult') // Aボタン
+      const mario = document.getElementById('mario')// マリオ画像
+
+      // スタートボタンをクリックしたら
+      btnResult.addEventListener('click', () => {
+        // 画像を左端から200px右に動かす
+        mario.animate(
+          // 途中の状態を表す配列
+          [
+            { transform: 'translateX(-200px)' }, // 開始時の状態（左端）
+            { transform: 'translateX(400px)' } // 終了時の状態（左端から200pxの位置）
+          ],
+          // タイミングに関する設定
+          {
+            fill: 'backwards', // 再生前後の状態（再生前、開始時の状態を適用）
+            duration: 2000, // 再生時間（2000ミリ秒）
+          },
+        );
+      });
+
+      // 星のエフェクトを開始する関数
+      function startStars() {
+        starMaker(100); // 星を100個生成
+      }
+
+      // 星のエフェクトを停止する関数
+      function stopStars() {
+        $('.star').remove();
+      }
+
+      // 星を生成する関数
+      function starMaker(n) {
+        for (var i = 0; i < n; i++) {
+          var star = document.createElement("div");
+          star.className = "star";
+          star.textContent = "★";
+          star.style.left = Math.random() * 100 + '%'; // 画面の幅に対するパーセンテージで左位置をランダム設定
+          star.style.fontSize = (Math.random() * (30 - 10) + 10) + 'px'; // 10pxから30pxの間でサイズをランダムに設定
+          star.style.animationDuration = (Math.random() * (10 - 5) + 5) + 's'; // 5秒から10秒の間でアニメーションの持続時間をランダムに設定
+          document.body.appendChild(star);
+
+          // 星が画面下に到達した後の処理
+          star.addEventListener('animationend', function () {
+            this.remove(); // アニメーションが終了した星をDOMから削除
+          });
+        }
+      }
+
+    });
+  </script>
+
+</body>
+
+</html>
